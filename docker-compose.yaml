@@ -1,0 +1,60 @@
+
+version: "3.9"
+
+services:
+  user:
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    container_name: userapp
+    image: user_img
+    build: .
+    command:
+      bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000" #DZIAŁAJĄCE - trzeba dodać --host 0.0.0.0 - działa na dockerze
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - user-db
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    networks:
+      - user-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: 'exit 0'
+  redis:
+    container_name: redis
+    image: redis/redis-stack
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    networks:
+      user-db:
+    healthcheck:
+      test: 'exit 0'
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq
+    ports:
+        - "5672:5672"
+    networks:
+      user-db:
+volumes:
+  db_data:
+networks:
+  user-db:
+    driver: bridge

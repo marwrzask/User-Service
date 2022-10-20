@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  title: Users Swagger - OpenAPI 3.0
+  description: Users Editor
+  version: 1.0.00
+servers:
+  - url: https://virtserver.swaggerhub.com/MARWRZASK/User-service/1.0.00/v1
+tags:
+  - name: users
+    description: Operations about user
+paths:
+  /users:
+    post:
+      tags:
+        - users 
+      summary: Create new account
+      operationId: addUser
+      requestBody:
+        description: Create new account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOutID'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service unavailable 
+  /users/{userID}:
+    get:
+      tags:
+        - users
+      summary: Get user's information
+      description: Get information
+      operationId: getUserNickname
+      parameters:
+        - name: userID
+          in: path
+          description: The user nickname
+          required: true
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service unavailable
+    put:
+      tags:
+        - users
+      summary: Update user information
+      description: Information update
+      operationId: updateUser
+      parameters:
+        - name: userID
+          in: path
+          description: user nickname is unique 
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user's information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - users
+      summary: Delete user
+      description: Remove user from the list
+      operationId: deleteUser
+      parameters:
+        - name: userID
+          in: path
+          description: Nickname to be deleted 
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid nickanme supplied
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service unavailable
+  /users/findBy:
+    get:
+      tags:
+        - users
+      summary: user search
+      description: Search by ID, nickname or email
+      operationId: searchUser
+      parameters:
+        - name: id
+          in: query
+          required: false 
+          description: search by user's id
+          schema:
+            type: integer
+        - name: nickname
+          in: query
+          required: false 
+          description: search by user's nickname
+          schema:
+            type: string
+        - name: email
+          in: query
+          required: false 
+          description: search by email adress
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid Nickname supplied
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service unavailable
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        country:
+          type: string
+          example: 'Poland'
+        dateofbirth:
+          type: string
+          example: '10.05.1980'
+        firstName:
+          type: string
+          example: 'Paul'
+        lastName:
+          type: string
+          example: 'Scholes'
+        nickname:
+          type: string
+          example: 'Scholi'
+        gender:
+          type: string
+          example: 'Male'
+        email:
+          type: string
+          example: 'scholes@email.com'
+          
+    UserOutID:
+      type: object
+      properties:
+        country:
+          type: string
+          example: 'Poland'
+        dateofbirth:
+          type: string
+          example: '10.05.1980'
+        firstName:
+          type: string
+          example: 'Paul'
+        lastName:
+          type: string
+          example: 'Scholes'
+        nickname:
+          type: string
+          example: 'Scholi'
+        gender:
+          type: string
+          example: 'Male'
+        email:
+          type: string
+          example: 'scholes@email.com'

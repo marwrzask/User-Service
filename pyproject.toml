@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "marcin-wrzask"
+version = "0.1.0"
+description = ""
+authors = ["MWRZASK <marcin.wrzask@capgemini.com>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.81.0"
+uvicorn = "^0.18.3"
+pydantic = {extras = ["email"], version = "^1.10.1"}
+requests = "^2.28.1"
+SQLAlchemy = "^1.4.41"
+psycopg2 = "^2.9.3"
+sqlmodel = "^0.0.8"
+fastapi-redis-cache = "^0.2.5"
+aioredis = "^2.0.1"
+aio-pika = "^8.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.0"
+pytest = "^7.1.2"
+black = "^22.8.0"
+pytest-cov = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
